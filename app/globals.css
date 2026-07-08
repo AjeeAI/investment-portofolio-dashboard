@@ -1,26 +1,41 @@
+/* globals.css */
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Trove v3 Color Palette */
+  --color-trove-primary: #059A83;
+  --color-trove-primary-light: #E0F5E1;
+  --color-trove-success: #10AE17;
+  --color-trove-negative: #BF221C;
+  
+  --color-trove-bg-canvas: #FBFBFB;
+  --color-trove-card-surface: #FFFFFF;
+  --color-trove-page-bg: #F5F1EE;
+  --color-trove-bg-default: #F2F6F6;
+  
+  --color-trove-text-default: #13342F;
+  --color-trove-text-neutral: #687D7A;
+  --color-trove-text-disabled: #92A29F;
+  
+  --color-trove-border: #DBDFDF;
+  
+  /* Chart Segments */
+  --color-trove-accent-blue: #00B6DF;
+  --color-trove-purple: #7B79C9;
+  --color-trove-cream: #F2C891;
+  --color-trove-dark-blue: #00323D;
+
+  /* Typography & Layout Rules */
+  --font-sans: "Inter", "DM Sans", sans-serif;
+  --radius-trove-card: 16px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Optional: Apply the background and font globally */
+@layer base {
+  body {
+    background-color: var(--color-trove-page-bg);
+    color: var(--color-trove-text-default);
+    font-family: var(--font-sans);
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }

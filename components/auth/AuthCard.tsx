@@ -1,0 +1,100 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+export default function AuthCard() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    // Simulate a network delay for the login assessment requirement
+    setTimeout(() => {
+      setIsLoading(false);
+      router.push("/dashboard");
+    }, 1500);
+  };
+
+  return (
+    <div className="bg-[var(--color-trove-card-surface)] p-8 sm:p-10 border border-[var(--color-trove-border)] rounded-[var(--radius-trove-card)] shadow-sm text-center">
+      
+      {/* Brand Icon Placeholder */}
+      <div className="w-12 h-12 bg-[var(--color-trove-primary)] text-white flex items-center justify-center rounded-lg mx-auto mb-6 text-xl font-bold">
+        T
+      </div>
+
+      <h1 className="text-[26px] font-semibold text-[var(--color-trove-text-default)] mb-2">
+        {isLogin ? "Welcome back" : "Create an account"}
+      </h1>
+      
+      <p className="text-[14px] text-[var(--color-trove-text-neutral)] mb-8">
+        {isLogin ? "Sign in to your account" : "Enter your details to get started"}
+      </p>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5 text-left">
+        {/* Email Field */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[12px] font-medium text-[var(--color-trove-text-neutral)]">
+            Email address
+          </label>
+          <input 
+            type="email" 
+            placeholder="name@example.com"
+            required
+            className="w-full p-3 rounded-lg bg-[var(--color-trove-bg-default)] border border-[var(--color-trove-border)] text-[14px] text-[var(--color-trove-text-default)] focus:outline-none focus:border-[var(--color-trove-primary)]"
+          />
+        </div>
+
+        {/* Password Field */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[12px] font-medium text-[var(--color-trove-text-neutral)]">
+            Password
+          </label>
+          <input 
+            type="password" 
+            placeholder="Enter your password"
+            required
+            className="w-full p-3 rounded-lg bg-[var(--color-trove-bg-default)] border border-[var(--color-trove-border)] text-[14px] text-[var(--color-trove-text-default)] focus:outline-none focus:border-[var(--color-trove-primary)]"
+          />
+        </div>
+
+        <button 
+          type="submit"
+          disabled={isLoading}
+          className="w-full mt-2 py-3 bg-[var(--color-trove-primary)] text-white text-[14px] font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-70 flex justify-center items-center h-[48px]"
+        >
+          {isLoading ? (
+            <span className="animate-pulse">Processing...</span>
+          ) : (
+            isLogin ? "Sign in" : "Create account"
+          )}
+        </button>
+      </form>
+
+      {/* Forgot Password Link (Only on Login) */}
+      {isLogin && (
+        <div className="mt-6">
+          <button className="text-[12px] text-[var(--color-trove-text-neutral)] hover:text-[var(--color-trove-primary)] transition-colors">
+            Forgot password?
+          </button>
+        </div>
+      )}
+
+      {/* Divider */}
+      <hr className="my-6 border-[var(--color-trove-border)]" />
+
+      {/* Toggle View Button */}
+      <button 
+        onClick={() => setIsLogin(!isLogin)}
+        className="text-[14px] text-[var(--color-trove-text-default)] hover:text-[var(--color-trove-primary)] transition-colors font-medium"
+      >
+        {isLogin ? "Create a Trove account" : "Already have an account? Sign in"}
+      </button>
+
+    </div>
+  );
+}
