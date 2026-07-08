@@ -9,6 +9,7 @@ import HoldingsList from "@/components/holdings/HoldingsList";
 import AssetAllocation from "@/components/dashboard/AssetAllocation";
 import TransactionHistory from "@/components/holdings/TransactionHistory";
 
+
 export default function DashboardPage() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +37,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-trove-page-bg)] flex">
+    <div className="min-h-screen bg-[var(--color-trove-page-bg)] flex flex-col md:flex-row">
       <Sidebar user={data.user} />
 
       <main className="flex-1 flex flex-col max-w-7xl mx-auto w-full">
