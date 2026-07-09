@@ -6,6 +6,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import { TrendingUp, TrendingDown, Activity } from "lucide-react";
 import PageSkeleton from "@/components/holdings/PageSkeleton";
+import MarketsSkeleton from "./MarketsSkeleton";
 
 // Mock data to show off UI skills without modifying the assessment JSON
 const marketIndices = [
@@ -44,7 +45,7 @@ export default function MarketsPage() {
 
   if (isLoading) {
     return (
-      <PageSkeleton />
+      <MarketsSkeleton/>
     );
   }
 

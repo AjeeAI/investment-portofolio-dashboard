@@ -6,6 +6,8 @@ import { getPortfolioData } from "@/services/api";
 import Sidebar from "@/components/layout/Sidebar";
 import { User, Shield, Bell, LogOut } from "lucide-react";
 import PageSkeleton from "@/components/holdings/PageSkeleton";
+import SettingsSkeleton from "./SettingsSkeleton";
+
 
 export default function SettingsPage() {
   const [user, setUser] = useState<{ name: string } | null>(null);
@@ -37,7 +39,7 @@ export default function SettingsPage() {
 
   if (isLoading) {
     return (
-      <PageSkeleton />
+      <SettingsSkeleton />
     );
   }
 

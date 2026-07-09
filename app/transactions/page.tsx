@@ -6,6 +6,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import TransactionHistory from "@/components/holdings/TransactionHistory";
 import PageSkeleton from "@/components/holdings/PageSkeleton";
+import TransactionsSkeleton from "./TransactionsSkeleton";
 
 export default function TransactionsPage() {
   const [data, setData] = useState<any>(null);
@@ -27,7 +28,7 @@ export default function TransactionsPage() {
 
   if (isLoading) {
     return (
-      <PageSkeleton />
+      <TransactionsSkeleton/>
     );
   }
 

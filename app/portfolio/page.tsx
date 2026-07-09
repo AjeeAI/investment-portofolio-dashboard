@@ -6,6 +6,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import HoldingsList from "@/components/holdings/HoldingsList";
 import PageSkeleton from "@/components/holdings/PageSkeleton";
+import PortfolioSkeleton from "./PortfolioSkeleton";
 
 export default function PortfolioPage() {
   const [data, setData] = useState<any>(null);
@@ -27,7 +28,7 @@ export default function PortfolioPage() {
 
   if (isLoading) {
     return (
-      <PageSkeleton />
+      <PortfolioSkeleton/>
     );
   }
 
