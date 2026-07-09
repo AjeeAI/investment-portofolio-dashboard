@@ -1,19 +1,75 @@
 "use client";
 
-const allocationData = [
-  { name: "Technology", value: 45, color: "var(--color-trove-primary, #005C4B)" }, 
-  { name: "Automotive", value: 25, color: "#2E90FA" }, 
-  { name: "Healthcare", value: 15, color: "#98A2B3" }, 
-  { name: "Finance", value: 15, color: "#475467" },    
-];
+import { useMemo } from "react";
 
-export default function AssetAllocation() {
+// 1. Define the expected shape of the data
+interface Holding {
+  sector: string;
+  shares: number;
+  currentPrice: number;
+}
+
+interface AssetAllocationProps {
+  holdings: Holding[];
+}
+
+// 2. Map specific sectors to the Trove color palette
+const SECTOR_COLORS: Record<string, string> = {
+  "Technology": "var(--color-trove-primary)", // Primary Green
+  "Automotive": "#2E90FA", // Blue
+  "Healthcare": "#98A2B3", // Light Gray
+  "Finance": "#475467",    // Dark Gray
+  "Other": "#E4E7EC",      // Fallback
+};
+
+export default function AssetAllocation({ holdings = [] }: AssetAllocationProps) {
+  
+  // 3. Dynamically calculate the allocations whenever holdings change
+  const allocationData = useMemo(() => {
+    if (!holdings || holdings.length === 0) return [];
+
+    let totalValue = 0;
+    const sectorMap: Record<string, number> = {};
+
+    // Group holdings by sector and calculate their total dollar value
+    holdings.forEach((holding) => {
+      const holdingValue = holding.shares * holding.currentPrice;
+      totalValue += holdingValue;
+      
+      if (sectorMap[holding.sector]) {
+        sectorMap[holding.sector] += holdingValue;
+      } else {
+        sectorMap[holding.sector] = holdingValue;
+      }
+    });
+
+    // Convert the dollar values into percentages
+    const result = Object.keys(sectorMap).map((sector) => {
+      const value = sectorMap[sector];
+      const percentage = totalValue > 0 ? (value / totalValue) * 100 : 0;
+      
+      return {
+        name: sector,
+        // Round to 1 decimal place to keep the UI clean
+        value: Number(percentage.toFixed(1)), 
+        // Assign the strict color, or fallback to 'Other'
+        color: SECTOR_COLORS[sector] || SECTOR_COLORS["Other"] 
+      };
+    });
+
+    // Sort so the largest sectors appear first in the bar and legend
+    return result.sort((a, b) => b.value - a.value);
+  }, [holdings]);
+
+  if (allocationData.length === 0) {
+    return <div className="text-[12px] text-[var(--color-trove-text-neutral)] mt-6">No allocation data available.</div>;
+  }
+
   return (
-    // Removed h-full and justify-between. Added mt-6 for breathing room.
     <div className="flex flex-col w-full gap-8 mt-6">
       
       {/* CSS-Only Stacked Bar */}
-      <div className="flex w-full h-3 rounded-full overflow-hidden">
+      <div className="flex w-full h-3 rounded-full overflow-hidden bg-[var(--color-trove-bg-default)]">
         {allocationData.map((item) => (
           <div 
             key={item.name} 

@@ -5,6 +5,7 @@ import { getPortfolioData } from "@/services/api";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import HoldingsList from "@/components/holdings/HoldingsList";
+import PageSkeleton from "@/components/holdings/PageSkeleton";
 
 export default function PortfolioPage() {
   const [data, setData] = useState<any>(null);
@@ -26,9 +27,7 @@ export default function PortfolioPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[var(--color-trove-page-bg)] flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-[var(--color-trove-border)] border-t-[var(--color-trove-primary)] rounded-full animate-spin"></div>
-      </div>
+      <PageSkeleton />
     );
   }
 

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"; // Imported for routing
 import { getPortfolioData } from "@/services/api";
 import Sidebar from "@/components/layout/Sidebar";
 import { User, Shield, Bell, LogOut } from "lucide-react";
+import PageSkeleton from "@/components/holdings/PageSkeleton";
 
 export default function SettingsPage() {
   const [user, setUser] = useState<{ name: string } | null>(null);
@@ -36,9 +37,7 @@ export default function SettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[var(--color-trove-page-bg)] flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-[var(--color-trove-border)] border-t-[var(--color-trove-primary)] rounded-full animate-spin"></div>
-      </div>
+      <PageSkeleton />
     );
   }
 

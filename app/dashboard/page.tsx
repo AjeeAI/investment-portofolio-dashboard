@@ -8,6 +8,7 @@ import NetWorthCard from "@/components/dashboard/NetWorthCard";
 import HoldingsList from "@/components/holdings/HoldingsList";
 import AssetAllocation from "@/components/dashboard/AssetAllocation";
 import TransactionHistory from "@/components/holdings/TransactionHistory";
+import PageSkeleton from "@/components/holdings/PageSkeleton";
 
 
 export default function DashboardPage() {
@@ -30,9 +31,7 @@ export default function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[var(--color-trove-page-bg)] flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-[var(--color-trove-border)] border-t-[var(--color-trove-primary)] rounded-full animate-spin"></div>
-      </div>
+      <PageSkeleton />
     );
   }
 
@@ -52,7 +51,7 @@ export default function DashboardPage() {
             </div>
             <div className="lg:col-span-1 bg-[var(--color-trove-card-surface)] border border-[var(--color-trove-border)] rounded-[var(--radius-trove-card)] p-6 flex flex-col justify-center">
               <h3 className="text-[16px] font-semibold text-[var(--color-trove-text-default)] mb-4">Asset Allocation</h3>
-              <AssetAllocation />
+              <AssetAllocation holdings={data.holdings} />
             </div>
           </div>
 

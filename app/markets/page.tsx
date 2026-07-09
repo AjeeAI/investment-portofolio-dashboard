@@ -5,6 +5,7 @@ import { getPortfolioData } from "@/services/api";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import { TrendingUp, TrendingDown, Activity } from "lucide-react";
+import PageSkeleton from "@/components/holdings/PageSkeleton";
 
 // Mock data to show off UI skills without modifying the assessment JSON
 const marketIndices = [
@@ -43,9 +44,7 @@ export default function MarketsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[var(--color-trove-page-bg)] flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-[var(--color-trove-border)] border-t-[var(--color-trove-primary)] rounded-full animate-spin"></div>
-      </div>
+      <PageSkeleton />
     );
   }
 
