@@ -3,56 +3,33 @@
 import { useEffect, useState } from "react";
 import { getPortfolioData } from "@/services/api";
 import Sidebar from "@/components/layout/Sidebar";
-import Header from "@/components/layout/Header";
-import HoldingsList from "@/components/holdings/HoldingsList";
-import PageSkeleton from "@/components/holdings/PageSkeleton";
-import PortfolioSkeleton from "./PortfolioSkeleton";
+import ComingSoon from "@/components/dashboard/ComingSoon";
 
 export default function PortfolioPage() {
-  const [data, setData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<{ name: string } | null>(null);
 
   useEffect(() => {
     async function loadData() {
       try {
-        const portfolioData = await getPortfolioData();
-        setData(portfolioData);
+        const data = await getPortfolioData();
+        setUser(data.user);
       } catch (err) {
-        console.error("Failed to load data");
-      } finally {
-        setIsLoading(false);
+        console.error("Failed to load user data");
       }
     }
     loadData();
   }, []);
 
-  if (isLoading) {
-    return (
-      <PortfolioSkeleton/>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-[var(--color-trove-page-bg)] flex flex-col md:flex-row">
-      <Sidebar user={data.user} />
+      {/* Sidebar persists with user data */}
+      <Sidebar user={user || { name: "" }} />
 
       <main className="flex-1 flex flex-col max-w-7xl mx-auto w-full">
-        <Header />
-
-        <div className="px-8 pb-12 flex flex-col gap-6">
+        <div className="px-8 pb-12 pt-10 flex flex-col h-full justify-center items-center flex-1">
           
-          {/* Page Header */}
-          <div>
-            <h1 className="text-[24px] font-bold text-[var(--color-trove-text-default)]">Portfolio Management</h1>
-            <p className="text-[14px] text-[var(--color-trove-text-neutral)] mt-1">
-              Review your current asset allocations, positions, and performance.
-            </p>
-          </div>
-
-          {/* Holdings Container */}
-          <div className="bg-[var(--color-trove-card-surface)] border border-[var(--color-trove-border)] rounded-[var(--radius-trove-card)] p-6">
-            <HoldingsList holdings={data.holdings} />
-          </div>
+          {/* Portfolio content replaced with Coming Soon */}
+          <ComingSoon pageName="Portfolio Management" />
 
         </div>
       </main>
