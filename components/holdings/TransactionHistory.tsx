@@ -16,7 +16,7 @@ interface Transaction {
 
 /**
  * TransactionHistory component renders a chronological list of asset transactions.
- * Includes status-based styling and transaction type formatting (Buy/Sell logic).
+ * Includes status-based styling and responsive design for mobile devices.
  */
 export default function TransactionHistory({ transactions }: { transactions: Transaction[] }) {
   
@@ -30,7 +30,7 @@ export default function TransactionHistory({ transactions }: { transactions: Tra
           
           // Handle zero-value edge cases for financial display
           const displayAmount = transaction.totalAmount === 0 
-            ? "Price unavailable" 
+            ? "N/A" 
             : `${isBuy ? "-" : "+"}${baseAmountFormatted}`;
 
           // Map transactional status enum to design system color tokens
@@ -48,36 +48,36 @@ export default function TransactionHistory({ transactions }: { transactions: Tra
           }
 
           return (
-            <div key={transaction.id} className="flex items-center justify-between p-5 border-b border-[var(--color-trove-border)] last:border-b-0 hover:bg-[var(--color-trove-bg-default)] transition-colors">
+            <div key={transaction.id} className="flex items-center justify-between p-4 md:p-5 border-b border-[var(--color-trove-border)] last:border-b-0 hover:bg-[var(--color-trove-bg-default)] transition-colors gap-3">
               
-              {/* Transaction metadata and visual type identifier */}
-              <div className="flex items-center gap-5">
-                <div className={`w-11 h-11 rounded-full flex items-center justify-center font-bold text-[20px] shrink-0 ${
+              {/* Left Side: Icon & Details - flex-1 min-w-0 ensures proper truncation */}
+              <div className="flex items-center gap-3 md:gap-5 flex-1 min-w-0">
+                <div className={`w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center font-bold text-[18px] md:text-[20px] shrink-0 ${
                   isBuy ? "bg-[var(--color-trove-primary-light)] text-[var(--color-trove-primary)]" : "bg-[var(--color-trove-bg-default)] text-[var(--color-trove-text-neutral)]"
                 }`}>
                   {isBuy ? "+" : "-"}
                 </div>
                 
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-[15px] font-bold text-[var(--color-trove-text-default)]">
+                <div className="flex flex-col gap-0.5 min-w-0">
+                  <span className="text-[14px] md:text-[15px] font-bold text-[var(--color-trove-text-default)] truncate">
                     {isBuy ? "Buy" : "Sell"} {transaction.name}
                   </span>
-                  <span className="text-[13px] text-[var(--color-trove-text-neutral)]">
+                  <span className="text-[12px] md:text-[13px] text-[var(--color-trove-text-neutral)] truncate">
                     {formatDate(transaction.date)} • {transaction.shares.toFixed(2)} Shares
                   </span>
                 </div>
               </div>
 
-              {/* Financial result and status indicator */}
-              <div className="flex flex-col items-end gap-1.5">
-                <span className={`text-[15px] font-bold ${
+              {/* Right Side: Amount & Status - shrink-0 prevents price from being squashed */}
+              <div className="flex flex-col items-end gap-1 shrink-0">
+                <span className={`text-[14px] md:text-[15px] font-bold ${
                   transaction.totalAmount === 0 
                     ? "text-[var(--color-trove-text-neutral)] italic text-[12px] font-medium" 
                     : "text-[var(--color-trove-text-default)]"
                 }`}>
                   {displayAmount}
                 </span>
-                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wider uppercase ${statusStyles}`}>
+                <span className={`px-2 py-0.5 md:px-2.5 md:py-0.5 rounded-full text-[10px] md:text-[11px] font-bold tracking-wider uppercase ${statusStyles}`}>
                   {transaction.status}
                 </span>
               </div>
