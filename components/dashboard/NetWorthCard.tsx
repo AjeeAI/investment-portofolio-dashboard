@@ -11,41 +11,31 @@ interface NetWorthCardProps {
 
 export default function NetWorthCard({ netWorth = 0, percentageChange = 0 }: NetWorthCardProps) {
   const [showBalance, setShowBalance] = useState(true);
+  const [activeTimeframe, setActiveTimeframe] = useState("1D"); // Added state for timeframe
+  
+  const timeframes = ["1D", "1W", "1M", "ALL"];
 
-  // Dynamically generate the chart data so the FINAL point matches your actual JSON balance
   const chartData = useMemo(() => {
-    // Failsafe: return a flat line if netWorth hasn't loaded yet
     if (!netWorth) {
       return [{ value: 0 }, { value: 0 }, { value: 0 }, { value: 0 }, { value: 0 }];
     }
     
     return [
-      { value: netWorth * 0.65 }, 
-      { value: netWorth * 0.62 }, 
-      { value: netWorth * 0.72 }, 
-      { value: netWorth * 0.68 }, 
-      { value: netWorth * 0.85 }, 
-      { value: netWorth * 0.81 }, 
-      { value: netWorth } 
+      { value: netWorth * 0.65 }, { value: netWorth * 0.62 }, { value: netWorth * 0.72 }, 
+      { value: netWorth * 0.68 }, { value: netWorth * 0.85 }, { value: netWorth * 0.81 }, { value: netWorth }
     ];
   }, [netWorth]);
 
   const formattedNetWorth = formatCurrency(netWorth);
-
-  // Determine positive/negative styling for the change indicator
   const safePercentage = percentageChange || 0;
   const isPositive = safePercentage >= 0;
-  
-  const changeColorClass = isPositive 
-    ? "text-[var(--color-trove-success, #10AE17)]" 
-    : "text-[var(--color-trove-negative, #BF221C)]";
-    
+  const changeColorClass = isPositive ? "text-[var(--color-trove-success)]" : "text-[var(--color-trove-negative)]";
   const changeSign = isPositive ? "+" : "";
 
   return (
     <div className="bg-[var(--color-trove-card-surface)] border border-[var(--color-trove-border)] rounded-[var(--radius-trove-card)] p-6 shadow-sm flex flex-col justify-between h-full min-h-[300px]">
       
-      {/* Top Header & Timeframe Filters */}
+      {/* Top Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-[14px] font-medium text-[var(--color-trove-text-neutral)] flex items-center gap-2">
           Total Net Worth
@@ -54,7 +44,6 @@ export default function NetWorthCard({ netWorth = 0, percentageChange = 0 }: Net
             className="focus:outline-none hover:opacity-70 transition-opacity ml-1"
             aria-label="Toggle balance visibility"
           >
-            {/* Increased size from 16 to 20 */}
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               {showBalance ? (
                 <><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></>
@@ -65,12 +54,21 @@ export default function NetWorthCard({ netWorth = 0, percentageChange = 0 }: Net
           </button>
         </h2>
         
-        {/* Tighter gap (gap-1 instead of gap-2) */}
+        {/* Dynamic Timeframe Pills */}
         <div className="flex gap-1 text-[11px] font-medium">
-          <span className="px-2 py-1 bg-[var(--color-trove-primary-light, #E6EFEF)] text-[var(--color-trove-primary, #005C4B)] rounded">1D</span>
-          <span className="px-2 py-1 text-[var(--color-trove-text-neutral)] hover:bg-[var(--color-trove-bg-default)] rounded cursor-pointer transition-colors">1W</span>
-          <span className="px-2 py-1 text-[var(--color-trove-text-neutral)] hover:bg-[var(--color-trove-bg-default)] rounded cursor-pointer transition-colors">1M</span>
-          <span className="px-2 py-1 text-[var(--color-trove-text-neutral)] hover:bg-[var(--color-trove-bg-default)] rounded cursor-pointer transition-colors">ALL</span>
+          {timeframes.map((tf) => (
+            <button
+              key={tf}
+              onClick={() => setActiveTimeframe(tf)}
+              className={`px-2 py-1 rounded transition-colors ${
+                activeTimeframe === tf 
+                  ? "bg-[var(--color-trove-primary-light)] text-[var(--color-trove-primary)]" 
+                  : "text-[var(--color-trove-text-neutral)] hover:bg-[var(--color-trove-bg-default)]"
+              }`}
+            >
+              {tf}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -91,20 +89,20 @@ export default function NetWorthCard({ netWorth = 0, percentageChange = 0 }: Net
         )}
       </div>
 
-      {/* Recharts Area Chart for Trendline */}
+      {/* Chart */}
       <div className="flex-1 w-full mt-6 -mx-2 h-[120px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData}>
             <defs>
               <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-trove-primary, #005C4B)" stopOpacity={0.2}/>
-                <stop offset="95%" stopColor="var(--color-trove-primary, #005C4B)" stopOpacity={0}/>
+                <stop offset="5%" stopColor="var(--color-trove-primary)" stopOpacity={0.2}/>
+                <stop offset="95%" stopColor="var(--color-trove-primary)" stopOpacity={0}/>
               </linearGradient>
             </defs>
             <Area
               type="monotone"
               dataKey="value"
-              stroke="var(--color-trove-primary, #005C4B)"
+              stroke="var(--color-trove-primary)"
               strokeWidth={3}
               fillOpacity={1}
               fill="url(#colorValue)"
@@ -113,7 +111,6 @@ export default function NetWorthCard({ netWorth = 0, percentageChange = 0 }: Net
           </AreaChart>
         </ResponsiveContainer>
       </div>
-
     </div>
   );
 }
