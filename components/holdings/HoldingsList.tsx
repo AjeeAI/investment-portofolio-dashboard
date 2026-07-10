@@ -122,7 +122,6 @@ export default function HoldingsList({ holdings }: HoldingsListProps) {
       <div className="flex flex-col gap-3 mt-2">
         {filteredHoldings.length > 0 ? (
           filteredHoldings.map((holding) => {
-            // Calculate financial metrics for display
             const totalValue = holding.shares * holding.currentPrice;
             const gainLoss = calculateGainLoss(holding.currentPrice, holding.avgCost, holding.shares);
             const gainLossPercentage = calculatePercentageChange(holding.currentPrice, holding.avgCost);
@@ -134,13 +133,13 @@ export default function HoldingsList({ holdings }: HoldingsListProps) {
             const formattedGain = isPositive ? `+${formatCurrency(gainLoss)}` : formatCurrency(gainLoss);
             const formattedPercentage = isPositive ? `+${formatPercentage(gainLossPercentage)}` : formatPercentage(gainLossPercentage);
 
-            // Handle edge case where market data is missing (currentPrice: 0)
             const isPriceUnavailable = holding.currentPrice === 0;
 
             return (
-              <div key={holding.id} className="bg-[var(--color-trove-card-surface)] border border-[var(--color-trove-border)] rounded-[var(--radius-trove-card)] p-4 flex items-center justify-between hover:shadow-sm transition-shadow">
+              <div key={holding.id} className="bg-[var(--color-trove-card-surface)] border border-[var(--color-trove-border)] rounded-[var(--radius-trove-card)] p-4 flex flex-col md:flex-row md:items-center hover:shadow-sm transition-shadow gap-4">
                 
-                <div className="flex items-center gap-4 w-1/3">
+                {/* Identity Section */}
+                <div className="flex items-center gap-4 flex-1">
                   <div className="w-12 h-12 rounded-xl border border-[var(--color-trove-border)] flex items-center justify-center text-[var(--color-trove-text-neutral)] bg-white shadow-sm shrink-0">
                     {getIconForTicker(holding.ticker)}
                   </div>
@@ -150,26 +149,31 @@ export default function HoldingsList({ holdings }: HoldingsListProps) {
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end w-1/3 pr-2 sm:pr-8">
-                  <span className="text-[12px] text-[var(--color-trove-text-neutral)] mb-0.5">Shares</span>
-                  <span className="text-[14px] font-bold text-[var(--color-trove-text-default)]">{holding.shares.toFixed(2)}</span>
-                </div>
+                {/* Metrics Section: Grid on mobile, Row on desktop */}
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[var(--color-trove-border)] md:border-t-0 md:pt-0 md:flex md:items-center md:justify-end md:gap-8">
+                  
+                  {/* Shares */}
+                  <div className="flex flex-col md:items-end">
+                    <span className="text-[11px] text-[var(--color-trove-text-neutral)] uppercase tracking-wider mb-0.5">Shares</span>
+                    <span className="text-[14px] font-bold text-[var(--color-trove-text-default)]">{holding.shares.toFixed(2)}</span>
+                  </div>
 
-                <div className="flex flex-col items-end w-1/3">
-                  {isPriceUnavailable ? (
-                    <span className="text-[14px] font-medium text-[var(--color-trove-text-neutral)] italic">
-                      Price unavailable
-                    </span>
-                  ) : (
-                    <>
-                      <span className="text-[14px] font-bold text-[var(--color-trove-text-default)] mb-0.5">
-                        {formattedValue}
-                      </span>
-                      <span className={`text-[12px] font-bold tracking-tight ${colorClass}`}>
-                        {formattedGain} ({formattedPercentage})
-                      </span>
-                    </>
-                  )}
+                  {/* Value / Gain */}
+                  <div className="flex flex-col md:items-end">
+                    <span className="text-[11px] text-[var(--color-trove-text-neutral)] uppercase tracking-wider mb-0.5 hidden md:block">Value</span>
+                    {isPriceUnavailable ? (
+                      <span className="text-[12px] font-medium text-[var(--color-trove-text-neutral)] italic">N/A</span>
+                    ) : (
+                      <>
+                        <span className="text-[14px] font-bold text-[var(--color-trove-text-default)]">
+                          {formattedValue}
+                        </span>
+                        <span className={`text-[12px] font-bold tracking-tight ${colorClass}`}>
+                          {formattedGain} ({formattedPercentage})
+                        </span>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             );
