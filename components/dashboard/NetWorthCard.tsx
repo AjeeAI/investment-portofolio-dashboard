@@ -20,13 +20,13 @@ export default function NetWorthCard({ netWorth = 0, percentageChange = 0 }: Net
     }
     
     return [
-      { value: netWorth * 0.65 }, // Simulate historical dips and peaks based on current value
+      { value: netWorth * 0.65 }, 
       { value: netWorth * 0.62 }, 
       { value: netWorth * 0.72 }, 
       { value: netWorth * 0.68 }, 
       { value: netWorth * 0.85 }, 
       { value: netWorth * 0.81 }, 
-      { value: netWorth } // The real current balance is the final dot on the graph
+      { value: netWorth } 
     ];
   }, [netWorth]);
 
@@ -51,10 +51,11 @@ export default function NetWorthCard({ netWorth = 0, percentageChange = 0 }: Net
           Total Net Worth
           <button 
             onClick={() => setShowBalance(!showBalance)}
-            className="focus:outline-none hover:opacity-70 transition-opacity"
+            className="focus:outline-none hover:opacity-70 transition-opacity ml-1"
             aria-label="Toggle balance visibility"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            {/* Increased size from 16 to 20 */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               {showBalance ? (
                 <><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></>
               ) : (
@@ -64,7 +65,8 @@ export default function NetWorthCard({ netWorth = 0, percentageChange = 0 }: Net
           </button>
         </h2>
         
-        <div className="flex gap-2 text-[11px] font-medium">
+        {/* Tighter gap (gap-1 instead of gap-2) */}
+        <div className="flex gap-1 text-[11px] font-medium">
           <span className="px-2 py-1 bg-[var(--color-trove-primary-light, #E6EFEF)] text-[var(--color-trove-primary, #005C4B)] rounded">1D</span>
           <span className="px-2 py-1 text-[var(--color-trove-text-neutral)] hover:bg-[var(--color-trove-bg-default)] rounded cursor-pointer transition-colors">1W</span>
           <span className="px-2 py-1 text-[var(--color-trove-text-neutral)] hover:bg-[var(--color-trove-bg-default)] rounded cursor-pointer transition-colors">1M</span>
