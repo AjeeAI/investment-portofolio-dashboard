@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { formatCurrency, formatPercentage } from "@/utils/formatters";
 import { calculateGainLoss, calculatePercentageChange } from "@/utils/calculators";
+// Import all brand icons and UI icons from react-icons
+import { SiApple, SiGoogle, SiTesla, SiNvidia, SiVisa } from "react-icons/si";
+import { FaBriefcaseMedical, FaBuildingColumns, FaFilm, FaAmazon, FaPills } from "react-icons/fa6";
 
 interface Holding {
   id: string;
@@ -29,6 +32,34 @@ export default function HoldingsList({ holdings }: { holdings: Holding[] }) {
 
     return matchesSearch && matchesSector;
   });
+
+  // Helper function mapping EVERY ticker in your JSON to a specific react-icon
+  const getIconForTicker = (ticker: string) => {
+    switch (ticker) {
+      case "AAPL":
+        return <SiApple size={22} className="text-[var(--color-trove-primary)]" />;
+      case "GOOGL":
+        return <SiGoogle size={20} className="text-[var(--color-trove-text-default)]" />;
+      case "TSLA":
+        return <SiTesla size={20} className="text-[var(--color-trove-negative)]" />;
+      case "NVDA":
+        return <SiNvidia size={22} className="text-[var(--color-trove-success)]" />;
+      case "AMZN":
+        return <FaAmazon size={20} className="text-[var(--color-trove-text-default)]" />;
+      case "V":
+        return <SiVisa size={24} className="text-blue-700" />;
+      case "PFE":
+        return <FaPills size={22} className="text-blue-500" />;
+      case "JNJ":
+        return <FaBriefcaseMedical size={20} className="text-[var(--color-trove-primary)]" />;
+      case "JPM":
+        return <FaBuildingColumns size={20} className="text-[var(--color-trove-text-default)]" />;
+      case "DIS":
+        return <FaFilm size={20} className="text-purple-600" />;
+      default:
+        return <span className="text-[14px] font-semibold text-[var(--color-trove-text-neutral)]">{ticker.substring(0, 2)}</span>;
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -95,8 +126,9 @@ export default function HoldingsList({ holdings }: { holdings: Holding[] }) {
               <div key={holding.id} className="bg-[var(--color-trove-card-surface)] border border-[var(--color-trove-border)] rounded-[var(--radius-trove-card)] p-4 flex items-center justify-between hover:shadow-sm transition-shadow">
                 
                 <div className="flex items-center gap-4 w-1/3">
-                  <div className="w-12 h-12 rounded-lg border border-[var(--color-trove-border)] flex items-center justify-center text-[var(--color-trove-text-neutral)] font-semibold text-[14px] shrink-0">
-                    {holding.ticker.substring(0, 2)}
+                  {/* Styled Icon Box matching the wireframe */}
+                  <div className="w-12 h-12 rounded-xl border border-[var(--color-trove-border)] flex items-center justify-center text-[var(--color-trove-text-neutral)] bg-white shadow-sm shrink-0">
+                    {getIconForTicker(holding.ticker)}
                   </div>
                   <div className="flex flex-col min-w-0">
                     <h4 className="text-[14px] font-bold text-[var(--color-trove-text-default)]">{holding.ticker}</h4>

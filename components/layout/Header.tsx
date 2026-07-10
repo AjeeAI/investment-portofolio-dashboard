@@ -4,9 +4,10 @@ import { Search, Bell, HelpCircle } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="flex justify-between items-center px-8 py-6 bg-[var(--color-trove-page-bg)]">
-      {/* Search Bar */}
-      <div className="relative w-96">
+    <header className="flex justify-between items-center px-4 md:px-8 py-6 bg-[var(--color-trove-page-bg)] gap-4">
+      
+      {/* Search Bar - Responsive width, properly rounded! */}
+      <div className="relative w-full max-w-md">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-trove-text-neutral)] w-4 h-4" />
         <input 
           type="text" 
@@ -16,11 +17,11 @@ export default function Header() {
       </div>
       
       {/* Notifications & Help */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4 shrink-0">
         <button className="p-2.5 bg-[var(--color-trove-card-surface)] border border-[var(--color-trove-border)] rounded-full shadow-sm hover:bg-[var(--color-trove-bg-default)] transition-colors">
           <Bell className="w-5 h-5 text-[var(--color-trove-text-neutral)]" />
         </button>
-        <button className="p-2.5 bg-[var(--color-trove-card-surface)] border border-[var(--color-trove-border)] rounded-full shadow-sm hover:bg-[var(--color-trove-bg-default)] transition-colors">
+        <button className="p-2.5 bg-[var(--color-trove-card-surface)] border border-[var(--color-trove-border)] rounded-full shadow-sm hover:bg-[var(--color-trove-bg-default)] transition-colors hidden sm:block">
           <HelpCircle className="w-5 h-5 text-[var(--color-trove-text-neutral)]" />
         </button>
       </div>
