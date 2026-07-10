@@ -64,6 +64,17 @@ Custom Branding: Replaced default Next.js assets with custom SVG branding for th
 Feedback Loops: Buttons feature active:scale-[0.98] micro-interactions to provide immediate physical feedback to the user.
 
 
+🚀 What I Would Improve or Add With More Time
+
+Data Caching & Performance: I would integrate TanStack Query (React Query) to handle smart caching, background refetching, and stale-time management. For the transaction history, if the data scale increased, I would add list virtualization (e.g., react-window) to ensure the DOM remains lightweight regardless of list size.
+
+Feature Expansion:
+
+Dark Mode: A high-contrast dark theme is standard for financial dashboards; I would extend the Tailwind theme config to support a fully dark-mode compliant palette.
+
+Real Authentication & Backend Integration: Swap the mock login for a production-grade Backend-as-a-Service (BaaS) like Firebase or Supabase. This would allow me to move beyond client-side simulation to a robust implementation handling user authentication, secure database storage, and real-time data synchronization.
+
+
 ✍️ Author
 [Adesoji Ajijolaoluwa David]
 
