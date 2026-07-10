@@ -55,6 +55,8 @@ Negative Returns: I implemented an absolute value calculation (Math.abs) for dis
 🎨 UI/UX Implementation
 Design System: Built using custom Tailwind configuration mapped to the provided Trove v3 color palette.
 
+Performance-Optimized Loaders: Implemented custom Tailwind-based skeleton loaders for all asynchronous states. By building these natively rather than using generic, asset-heavy SVG spinners, I reduced bundle size and improved perceived performance during data fetching.
+
 Responsiveness: Utilized a "Mobile-First" approach with a custom sidebar drawer and a responsive grid layout.
 
 Custom Branding: Replaced default Next.js assets with custom SVG branding for the address bar, ensuring a professional, cohesive identity from the moment the user lands on the application.
