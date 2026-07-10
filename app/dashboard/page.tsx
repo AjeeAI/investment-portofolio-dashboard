@@ -9,7 +9,6 @@ import HoldingsList from "@/components/holdings/HoldingsList";
 import AssetAllocation from "@/components/dashboard/AssetAllocation";
 import TransactionHistory from "@/components/holdings/TransactionHistory";
 import PageSkeleton from "@/components/holdings/PageSkeleton";
-// 1. Import the newly created AccountList
 import AccountList from "@/components/dashboard/AccountList"; 
 
 export default function DashboardPage() {

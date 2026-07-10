@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+/**
+ * AuthCard component provides a unified login/signup form interface.
+ * Handles input state management, client-side validation, and simulated auth flows.
+ */
 export default function AuthCard() {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -10,7 +14,7 @@ export default function AuthCard() {
   const [errors, setErrors] = useState({ email: "", password: "", server: "" });
   const router = useRouter();
 
-  // Unified change handler (From Day 9: Part 3 & 7)
+  // Handles input changes and clears field-specific errors upon user interaction
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
@@ -19,13 +23,13 @@ export default function AuthCard() {
       [name]: value
     });
     
-    // Clear the specific field error (and server error) when the user starts typing
+    // Clear specific field errors when the user interacts with the input
     if (errors[name as keyof typeof errors] || errors.server) {
       setErrors({ ...errors, [name]: "", server: "" });
     }
   };
 
-  // Structured validation (From Day 9: Part 4)
+  // Performs client-side form validation before submission
   const validate = () => {
     const newErrors = { email: "", password: "", server: "" };
     let isValid = true;
@@ -59,11 +63,11 @@ export default function AuthCard() {
 
     setIsLoading(true);
 
-    // Simulate Network Request
+    // Simulate asynchronous authentication request
     setTimeout(() => {
       setIsLoading(false);
       
-      // MOCK FAILED STATE: If email is 'fail@test.com', simulate a 401 error
+      // Mocked backend error response for demonstration purposes
       if (formData.email === "fail@test.com") {
         setErrors((prev) => ({ ...prev, server: "Invalid email or password." }));
       } else {
@@ -87,7 +91,7 @@ export default function AuthCard() {
         {isLogin ? "Sign in to your account" : "Enter your details to get started"}
       </p>
 
-      {/* Server Error Message */}
+      {/* Server-side error alert */}
       {errors.server && (
         <div className="mb-4 p-3 bg-[var(--color-trove-negative)]/10 border border-[var(--color-trove-negative)] rounded-lg text-[12px] text-[var(--color-trove-negative)]">
           {errors.server}
@@ -101,7 +105,7 @@ export default function AuthCard() {
           <label className="text-[12px] font-medium text-[var(--color-trove-text-neutral)]">Email address</label>
           <input 
             type="text" 
-            name="email" // Added name attribute for handleChange
+            name="email" // Attribute required for dynamic change handler
             placeholder="name@example.com"
             value={formData.email}
             onChange={handleChange}
@@ -115,7 +119,7 @@ export default function AuthCard() {
           <label className="text-[12px] font-medium text-[var(--color-trove-text-neutral)]">Password</label>
           <input 
             type="password" 
-            name="password" // Added name attribute for handleChange
+            name="password" // Attribute required for dynamic change handler
             placeholder="Enter your password"
             value={formData.password}
             onChange={handleChange}
@@ -140,7 +144,7 @@ export default function AuthCard() {
         </button>
       </form>
 
-      {/* Forgot Password Link (Only on Login) */}
+      {/* Conditional rendering for password recovery */}
       {isLogin && (
         <div className="mt-6">
           <button className="text-[12px] text-[var(--color-trove-text-neutral)] hover:text-[var(--color-trove-primary)] transition-colors">
@@ -149,15 +153,15 @@ export default function AuthCard() {
         </div>
       )}
 
-      {/* Divider */}
+      {/* Section separator */}
       <hr className="my-6 border-[var(--color-trove-border)]" />
 
-      {/* Toggle View Button */}
+      {/* Switch between login and registration views */}
       <button 
         onClick={() => {
           setIsLogin(!isLogin);
-          setErrors({ email: "", password: "", server: "" }); // Reset errors when switching views
-          setFormData({ email: "", password: "" }); // Clear form when switching views
+          setErrors({ email: "", password: "", server: "" }); 
+          setFormData({ email: "", password: "" });
         }}
         className="text-[14px] text-[var(--color-trove-text-default)] hover:text-[var(--color-trove-primary)] transition-colors font-medium"
       >

@@ -14,6 +14,10 @@ interface Transaction {
   status: "COMPLETED" | "PENDING" | "FAILED";
 }
 
+/**
+ * TransactionHistory component renders a chronological list of asset transactions.
+ * Includes status-based styling and transaction type formatting (Buy/Sell logic).
+ */
 export default function TransactionHistory({ transactions }: { transactions: Transaction[] }) {
   
   return (
@@ -24,11 +28,12 @@ export default function TransactionHistory({ transactions }: { transactions: Tra
           
           const baseAmountFormatted = formatCurrency(Math.abs(transaction.totalAmount));
           
+          // Handle zero-value edge cases for financial display
           const displayAmount = transaction.totalAmount === 0 
             ? "Price unavailable" 
             : `${isBuy ? "-" : "+"}${baseAmountFormatted}`;
 
-          // Status Pill Styling
+          // Map transactional status enum to design system color tokens
           let statusStyles = "";
           switch (transaction.status) {
             case "COMPLETED":
@@ -45,7 +50,7 @@ export default function TransactionHistory({ transactions }: { transactions: Tra
           return (
             <div key={transaction.id} className="flex items-center justify-between p-5 border-b border-[var(--color-trove-border)] last:border-b-0 hover:bg-[var(--color-trove-bg-default)] transition-colors">
               
-              {/* Left Side: Icon & Details */}
+              {/* Transaction metadata and visual type identifier */}
               <div className="flex items-center gap-5">
                 <div className={`w-11 h-11 rounded-full flex items-center justify-center font-bold text-[20px] shrink-0 ${
                   isBuy ? "bg-[var(--color-trove-primary-light)] text-[var(--color-trove-primary)]" : "bg-[var(--color-trove-bg-default)] text-[var(--color-trove-text-neutral)]"
@@ -63,7 +68,7 @@ export default function TransactionHistory({ transactions }: { transactions: Tra
                 </div>
               </div>
 
-              {/* Right Side: Amount & Status */}
+              {/* Financial result and status indicator */}
               <div className="flex flex-col items-end gap-1.5">
                 <span className={`text-[15px] font-bold ${
                   transaction.totalAmount === 0 

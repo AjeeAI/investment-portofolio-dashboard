@@ -28,7 +28,6 @@ export default function TransactionsPage() {
       <main className="flex-1 flex flex-col max-w-7xl mx-auto w-full">
         <div className="px-8 pb-12 pt-10 flex flex-col h-full justify-center items-center flex-1">
           
-          {/* Transaction content replaced with Coming Soon */}
           <ComingSoon pageName="Transaction History" />
 
         </div>

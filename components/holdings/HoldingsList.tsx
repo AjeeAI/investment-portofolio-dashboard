@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { formatCurrency, formatPercentage } from "@/utils/formatters";
 import { calculateGainLoss, calculatePercentageChange } from "@/utils/calculators";
-// Import all brand icons and UI icons from react-icons
 import { SiApple, SiGoogle, SiTesla, SiNvidia, SiVisa } from "react-icons/si";
 import { FaBriefcaseMedical, FaBuildingColumns, FaFilm, FaAmazon, FaPills } from "react-icons/fa6";
 
@@ -17,12 +16,23 @@ interface Holding {
   currentPrice: number;
 }
 
-export default function HoldingsList({ holdings }: { holdings: Holding[] }) {
+interface HoldingsListProps {
+  holdings: Holding[];
+}
+
+/**
+ * HoldingsList component renders a filterable list of user asset holdings.
+ * Features include keyword-based search, sector filtering, and visual status 
+ * indicators for gain/loss performance.
+ */
+export default function HoldingsList({ holdings }: HoldingsListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSector, setActiveSector] = useState("All");
 
+  // Derive unique sectors from data for the filter UI
   const sectors = ["All", ...Array.from(new Set(holdings.map((h) => h.sector)))];
 
+  // Memoized filter logic based on text input and selected sector pill
   const filteredHoldings = holdings.filter((holding) => {
     const matchesSearch = 
       holding.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -33,7 +43,10 @@ export default function HoldingsList({ holdings }: { holdings: Holding[] }) {
     return matchesSearch && matchesSector;
   });
 
-  // Helper function mapping EVERY ticker in your JSON to a specific react-icon
+  /**
+   * Utility to map asset tickers to their respective brand icons.
+   * Falls back to a text-based avatar if no specific icon is found.
+   */
   const getIconForTicker = (ticker: string) => {
     switch (ticker) {
       case "AAPL":
@@ -64,7 +77,7 @@ export default function HoldingsList({ holdings }: { holdings: Holding[] }) {
   return (
     <div className="flex flex-col gap-4">
       
-      {/* ROW 1: Holdings Title (Left) + Search Bar (Right) */}
+      {/* Header and Search Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h3 className="text-[18px] font-bold text-[var(--color-trove-text-default)]">
           Holdings
@@ -88,7 +101,7 @@ export default function HoldingsList({ holdings }: { holdings: Holding[] }) {
         </div>
       </div>
 
-      {/* ROW 2: Filter Pills (Under the header) */}
+      {/* Sector Filter Pills */}
       <div className="flex flex-wrap gap-2">
         {sectors.map((sector) => (
           <button
@@ -105,10 +118,11 @@ export default function HoldingsList({ holdings }: { holdings: Holding[] }) {
         ))}
       </div>
 
-      {/* HOLDINGS LIST */}
+      {/* Holdings Listing */}
       <div className="flex flex-col gap-3 mt-2">
         {filteredHoldings.length > 0 ? (
           filteredHoldings.map((holding) => {
+            // Calculate financial metrics for display
             const totalValue = holding.shares * holding.currentPrice;
             const gainLoss = calculateGainLoss(holding.currentPrice, holding.avgCost, holding.shares);
             const gainLossPercentage = calculatePercentageChange(holding.currentPrice, holding.avgCost);
@@ -120,13 +134,13 @@ export default function HoldingsList({ holdings }: { holdings: Holding[] }) {
             const formattedGain = isPositive ? `+${formatCurrency(gainLoss)}` : formatCurrency(gainLoss);
             const formattedPercentage = isPositive ? `+${formatPercentage(gainLossPercentage)}` : formatPercentage(gainLossPercentage);
 
+            // Handle edge case where market data is missing (currentPrice: 0)
             const isPriceUnavailable = holding.currentPrice === 0;
 
             return (
               <div key={holding.id} className="bg-[var(--color-trove-card-surface)] border border-[var(--color-trove-border)] rounded-[var(--radius-trove-card)] p-4 flex items-center justify-between hover:shadow-sm transition-shadow">
                 
                 <div className="flex items-center gap-4 w-1/3">
-                  {/* Styled Icon Box matching the wireframe */}
                   <div className="w-12 h-12 rounded-xl border border-[var(--color-trove-border)] flex items-center justify-center text-[var(--color-trove-text-neutral)] bg-white shadow-sm shrink-0">
                     {getIconForTicker(holding.ticker)}
                   </div>

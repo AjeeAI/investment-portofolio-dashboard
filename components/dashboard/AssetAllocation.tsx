@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 
-// 1. Define the expected shape of the data
 interface Holding {
   sector: string;
   shares: number;
@@ -13,25 +12,30 @@ interface AssetAllocationProps {
   holdings: Holding[];
 }
 
-// 2. Map specific sectors to the Trove color palette
+/**
+ * Mapping of sector identifiers to Trove design system color tokens.
+ */
 const SECTOR_COLORS: Record<string, string> = {
-  "Technology": "var(--color-trove-primary)", // Primary Green
-  "Automotive": "#2E90FA", // Blue
-  "Healthcare": "#98A2B3", // Light Gray
-  "Finance": "#475467",    // Dark Gray
-  "Other": "#E4E7EC",      // Fallback
+  "Technology": "var(--color-trove-primary)",
+  "Automotive": "#2E90FA",
+  "Healthcare": "#98A2B3",
+  "Finance": "#475467",
+  "Other": "#E4E7EC",
 };
 
+/**
+ * Renders a horizontal stacked bar chart and legend for portfolio sector allocation.
+ * Uses useMemo to derive percentage distribution from raw holding data.
+ */
 export default function AssetAllocation({ holdings = [] }: AssetAllocationProps) {
   
-  // 3. Dynamically calculate the allocations whenever holdings change
   const allocationData = useMemo(() => {
     if (!holdings || holdings.length === 0) return [];
 
     let totalValue = 0;
     const sectorMap: Record<string, number> = {};
 
-    // Group holdings by sector and calculate their total dollar value
+    // Aggregate values by sector and compute total portfolio value
     holdings.forEach((holding) => {
       const holdingValue = holding.shares * holding.currentPrice;
       totalValue += holdingValue;
@@ -43,21 +47,19 @@ export default function AssetAllocation({ holdings = [] }: AssetAllocationProps)
       }
     });
 
-    // Convert the dollar values into percentages
+    // Normalize sector totals to percentage-based format for UI rendering
     const result = Object.keys(sectorMap).map((sector) => {
       const value = sectorMap[sector];
       const percentage = totalValue > 0 ? (value / totalValue) * 100 : 0;
       
       return {
         name: sector,
-        // Round to 1 decimal place to keep the UI clean
         value: Number(percentage.toFixed(1)), 
-        // Assign the strict color, or fallback to 'Other'
         color: SECTOR_COLORS[sector] || SECTOR_COLORS["Other"] 
       };
     });
 
-    // Sort so the largest sectors appear first in the bar and legend
+    // Sort by value descending to prioritize visual prominence of largest holdings
     return result.sort((a, b) => b.value - a.value);
   }, [holdings]);
 
@@ -68,7 +70,7 @@ export default function AssetAllocation({ holdings = [] }: AssetAllocationProps)
   return (
     <div className="flex flex-col w-full gap-8 mt-6">
       
-      {/* CSS-Only Stacked Bar */}
+      {/* Visual representation of allocation distribution */}
       <div className="flex w-full h-3 rounded-full overflow-hidden bg-[var(--color-trove-bg-default)]">
         {allocationData.map((item) => (
           <div 
@@ -79,7 +81,7 @@ export default function AssetAllocation({ holdings = [] }: AssetAllocationProps)
         ))}
       </div>
 
-      {/* Custom 2x2 Legend */}
+      {/* Legend identifying sector colors and relative percentages */}
       <div className="grid grid-cols-2 gap-y-6 gap-x-2">
         {allocationData.map((item) => (
           <div key={item.name} className="flex items-start gap-2 min-w-0">
